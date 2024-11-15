@@ -1,0 +1,9 @@
+.section-padding {
+    padding-top: clamp(4.188rem, 3.625rem + 2.813vw, 7rem);
+    padding-bottom: clamp(2.563rem, 2.212rem + 1.75vw, 4.313rem);
+}
+
+.menu-margin {
+    margin-top: clamp(4rem, 3.2rem + 4vw, 8rem);
+    margin-bottom: clamp(4rem, 3.2rem + 4vw, 8rem);
+}

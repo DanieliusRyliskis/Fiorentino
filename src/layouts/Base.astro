@@ -1,0 +1,54 @@
+---
+// Declare Prop Type
+interface Props {
+language:string;
+title:string;
+main:boolean;
+}
+
+// Assign Props To Variables
+const {language, title, main} = Astro.props
+---
+
+<style>
+.stop-scrolling {
+  height: 100%;
+  overflow: hidden;
+}
+</style>
+
+<html lang={language}>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+        {main && <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>}
+        
+        <title>{title}</title>
+	</head>
+	<body class="merriweather-light text-base">
+        <!-- Children Will Go Here -->
+        <slot />
+        {main && (
+            <script>
+              if (window.netlifyIdentity) {
+                window.netlifyIdentity.on("init", (user) => {
+                  if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                      document.location.href = "/admin/";
+                    });
+                  }
+                });
+              }
+            </script>
+        )}
+	</body>
+</html>
+
+
+

@@ -1,0 +1,194 @@
+---
+import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
+import ImageComponent from './ImageComponent.astro';
+
+interface Props {
+    language: string;
+}
+
+const { language } = Astro.props;
+
+const renderContent = () => {
+    if (language === 'lt') {
+        const content = [
+            'Galerija',
+            'Nuotrauka',
+            'Piktograma, kuri uždaro galerijos stebėjimą',
+            'Piktograma, kuri sugrįžta prie praeitos nuotraukos',
+            'Piktograma, kuri pereina prie sekančios nuotraukos',
+        ];
+        return content;
+    } else if (language === 'en') {
+        const content = [
+            'Gallery',
+            'Picture',
+            'The icon that closes the gallery observation',
+            'An icon that goes back to a previous photo',
+            'An icon that moves on to the next picture',
+        ];
+        return content;
+    } else if (language === 'it') {
+        const content = [
+            'Galleria',
+            'Immagine',
+            "L'icona che chiude l'osservazione della galleria",
+            "Un'icona che torna a una foto precedente",
+            "Un'icona che passa all'immagine successiva",
+        ];
+
+        return content;
+    }
+};
+
+// File Sorting
+const markdowns = await Astro.glob('/src/assets/pictures/*.md');
+const images = await import.meta.glob('/src/assets/pictures/*.jpg', {
+    eager: true,
+});
+
+const frontmatter = markdowns.map((f) => f.frontmatter);
+
+const sortOldest = function (categoryName) {
+    const filtered = frontmatter.filter(
+        (file) => file.category === categoryName,
+    );
+    const sorted = filtered.sort((a, b) =>
+        a.publish_date.localeCompare(b.publish_date),
+    );
+    return sorted;
+};
+const left = sortOldest('Left (Horizontal)');
+const middle = sortOldest('Middle (Vertical)');
+const right = sortOldest('Right (Horizontal)');
+---
+
+<section id="section4">
+    <h3
+        class="cormorant-garamond-regular text-header text-3xl text-center section-padding"
+    >
+        {renderContent()[0]}
+    </h3>
+    <!-- 2xl:w-fit -->
+    <div
+        class="flex flex-col lg:flex-row gap-4 w-fit lg:w-[95%] mx-auto mb-[clamp(4rem,_3.2rem_+_4vw,_8rem)] border-2 border-blue-500"
+        id="imageContainer"
+    >
+    <!-- Performance 81 -->
+    <!-- Performance 82 w/o Gallery -->
+
+        <div class="flex flex-col w-[90%] mx-auto gap-4 border-2 border-red-500">
+            <!--
+            <ImageComponent
+                name="Gallery_1"
+                size="lg:h-[21.563rem]"
+                alt={`${renderContent()[1]} 1`}
+                index={1}
+            />
+            -->
+
+            {
+                left.map((c) => (
+                    <Picture
+                        src={images[c.file_path].default}
+                        widths={[600, 900]}
+                        sizes={"(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 64em) 900px, (min-width: 64.063em) 600px"}
+                        class="w-full lg:h-[21.563rem] lg:object-cover cursor-pointer"
+                        alt={c.title}
+                        formats={['avif', 'webp']}
+                        fallbackFormat="jpg"
+                        quality={'high'}
+                    />
+                ))
+            }
+        </div>
+
+
+        <!-- Place Where Vertical Images Are Rendered -->
+        <div class="flex flex-col w-[90%] mx-auto gap-4">
+            <!--
+            <ImageComponent
+                name="Gallery_2"
+                size="lg:h-[43.875rem]"
+                alt={`${renderContent()[1]} 2`}
+                index={2}
+            />
+            -->
+            {
+                middle.map((c) => (
+                    <Picture
+                        src={images[c.file_path].default}
+                        class="w-full lg:h-[43.875rem] lg:object-cover cursor-pointer"
+                        widths={[600, 900]}
+                        sizes={"(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 64em) 900px, (min-width: 64.063em) 600px"}
+                        alt={c.title}
+                        formats={['avif', 'webp']}
+                        fallbackFormat="jpg"
+                        quality={'high'}
+                    />
+                ))
+            }
+        </div>
+
+        <div class="flex flex-col w-[90%] mx-auto gap-4">
+            <!--
+            <ImageComponent
+                name="Gallery_3"
+                size="lg:h-[21.563rem]"
+                alt={`${renderContent()[1]} 3`}
+                index={3}
+            />
+            -->
+            {
+                right.map((c) => (
+                    <Picture
+                        src={images[c.file_path].default}
+                        widths={[600, 900]}
+                        sizes={"(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 64em) 900px, (min-width: 64.063em) 600px"}
+                        class="w-full lg:h-[21.563rem] lg:object-cover cursor-pointer"
+                        alt={c.title}
+                        formats={['avif', 'webp']}
+                        fallbackFormat="jpg"
+                        quality={'high'}
+                    />
+                ))
+            }
+        </div>
+    </div>
+
+    <!-- Modal Window -->
+    <div
+        class="hidden fixed z-20 top-0 left-0 w-screen h-screen bg-black opacity-50"
+        id="modal"
+    >
+    </div>
+    <!-- Gallery Interface -->
+    <!-- Maybe Use Grid Next Time -->
+    <div
+        class="hidden fixed z-50 w-screen h-screen top-0 left-0"
+        id="interface"
+    >
+        <img
+            class="absolute top-[2%] right-[2%] cursor-pointer"
+            src="/svg/Close.svg"
+            id="closeIcon"
+            alt={renderContent()[2]}
+            decoding="async"
+        />
+        <img
+            class="absolute top-1/2 translate-y-[-50%] left-[5%] hidden lg:inline-block cursor-pointer"
+            src="/svg/Arrow_left.svg"
+            id="arrowLeft"
+            alt={renderContent()[3]}
+            decoding="async"
+        />
+        <img
+            class="absolute top-1/2 translate-y-[-50%] right-[5%] hidden lg:inline-block cursor-pointer"
+            src="/svg/Arrow_right.svg"
+            id="arrowRight"
+            alt={renderContent()[4]}
+            decoding="async"
+        />
+        <div class="w-full h-full" id="background"></div>
+    </div>
+</section>

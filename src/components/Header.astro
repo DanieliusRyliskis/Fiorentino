@@ -1,0 +1,131 @@
+---
+interface Props {
+    language: string;
+}
+
+const { language } = Astro.props;
+
+const renderContent = () => {
+    if (language === 'lt') {
+        const content = {
+            links: ['Apie Mus', 'Meniu', 'Galerija', 'Kontaktai'],
+            langToggles: ['LT', ['EN', '/en'], ['IT', '/it']],
+            alt: [
+                'fiorentino logotipas',
+                'Piktograma, kuri atidaro puslapio navigaciją',
+            ],
+        };
+        return content;
+    } else if (language === 'en') {
+        const content = {
+            links: ['About Us', 'Menu', 'Gallery', 'Contacts'],
+            langToggles: ['EN', ['LT', '/'], ['IT', '/it']],
+            alt: ['fiorentino logo', 'icon that opens the page navigation'],
+        };
+        return content;
+    } else if (language === 'it') {
+        const content = {
+            links: ['Chi siamo', 'Menu', 'Galleria', 'Contatti'],
+            langToggles: ['IT', ['LT', '/'], ['EN', '/en']],
+            alt: ['fiorentino logo', 'icona che apre la pagina di navigazione'],
+        };
+        return content;
+    }
+};
+---
+
+<header class="sticky top-0 z-10">
+    <nav class="bg-white flex flex-col flex-wrap lg:flex-row lg:items-center">
+        <div
+            class="flex justify-between items-center px-3 py-6 lg:grow lg:px-0"
+        >
+            <a class="lg:pl-6" href="#section1">
+                <!-- Logo -->
+                <picture>
+                    <source
+                        srcset="/svg/Logo_black.svg"
+                        media="(min-width: 1024px)"
+                    />
+                    <img
+                        src="/svg/Mobile_logo_black.svg"
+                        alt={renderContent().alt[0]}
+                        class="cursor-pointer"
+                        id="logo"
+                    />
+                </picture>
+            </a>
+            <img
+                class="lg:hidden cursor-pointer"
+                src="/svg/Hamburger_menu.svg"
+                alt={renderContent().alt[1]}
+                id="menuIcon"
+            />
+        </div>
+        <ul
+            class="overflow-hidden h-0 transition-[height] duration-[1s] ease-out lg:overflow-visible lg:h-fit lg:flex lg:justify-center lg:items-center lg:pr-6"
+            id="linkContainer"
+        >
+            <li class="py-0.5 px-2 w-fit lg:px-4 lg:py-4">
+                <a class="hover:text-header" href="#section2"
+                    >{renderContent().links[0]}</a
+                >
+            </li>
+            <li class="py-0.5 px-2 w-fit lg:px-4 lg:py-4">
+                <a class="hover:text-header" href="#section3"
+                    >{renderContent().links[1]}</a
+                >
+            </li>
+            <li class="py-0.5 px-2 w-fit lg:px-4 lg:py-4">
+                <a class="hover:text-header" href="#section4"
+                    >{renderContent().links[2]}</a
+                >
+            </li>
+            <li
+                class="relative px-2 w-fit lg:py-0 lg:px-4 flex flex-col lg:flex-row"
+            >
+                <span class="peer cursor-pointer py-0.5 hover:text-header"
+                    >{renderContent().langToggles[0]}</span
+                >
+                <div
+                    class="flex flex-col justify-center lg:hidden lg:peer-hover:flex lg:hover:flex lg:absolute lg:left-1/2 lg:translate-x-[-50%] lg:top-[100%] lg:bg-white lg:py-4
+                    lg:px-2 lg:rounded-md"
+                >
+                    <a
+                        class="text-center cursor-pointer py-0.5 hover:text-header lang"
+                        href={renderContent().langToggles[1][1]}
+                        }>{renderContent().langToggles[1][0]}</a
+                    >
+                    <a
+                        class="text-center cursor-pointer py-0.5 hover:text-header lang"
+                        href={renderContent().langToggles[2][1]}
+                        }>{renderContent().langToggles[2][0]}</a
+                    >
+                </div>
+            </li>
+            <li class="py-0.5 px-2 w-fit lg:px-4 lg:py-4">
+                <a
+                    class="merriweather-light text-white bg-secondary inline-block cursor-pointer py-2 px-6 lg:py-2.5 lg:px-9
+                    lg:border-2 lg:border-secondary lg:hover:text-secondary lg:hover:bg-transparent lg:hover:duration-500 lg:hover:transition-colors lg:hover:ease-in-out"
+                    href="#section5">{renderContent().links[3]}</a
+                >
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<script>
+    const menu = document.getElementById('menuIcon');
+    let menuOpen = false;
+    const linkContainer = document.getElementById('linkContainer');
+
+    // Toggles Navbar On Mobile
+    menu.addEventListener('click', () => {
+        if (menuOpen) {
+            linkContainer.style.height = '0px';
+        } else if (!menuOpen) {
+            const linkContainerHeight = linkContainer.scrollHeight + 10 + 'px';
+            linkContainer.style.height = linkContainerHeight;
+        }
+        menuOpen = !menuOpen;
+    });
+</script>

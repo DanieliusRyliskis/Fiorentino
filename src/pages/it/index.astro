@@ -1,0 +1,23 @@
+---
+import Base from "../../layouts/Base.astro"
+import Header from "../../components/Header.astro"
+import Hero from "../../components/Hero.astro"
+import About from "../../components/About.astro"
+import Gallery from "../../components/Gallery.astro"
+import Footer from "../../components/Footer.astro"
+import "../../styles/fonts.css"
+import "../../styles/padding-margin.css"
+---
+<Base language="it" title="Fiorentino" main={false}>
+    <Header language="it"></Header>
+    <main>
+        <Hero language="it"></Hero>
+        <About language="it"></About>
+        <Menu language="it"></Menu>
+        <Gallery language="it"></Gallery>
+        <Footer language="it"></Footer>
+    </main>
+</Base>
+
+<script src="../../scripts/gallery.js"></script>
+<script src="../../scripts/navigation.js"></script>

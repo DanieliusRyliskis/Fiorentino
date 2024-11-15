@@ -1,0 +1,23 @@
+---
+interface Props {
+    name: string;
+    size: string;
+    alt: string;
+    index: number;
+}
+
+const { name, size, alt, index } = Astro.props;
+---
+
+<picture>
+    <source srcset={`/${name}.webp`} type="image/webp" />
+    <img
+        class={`w-full ${size} lg:object-cover cursor-pointer`}
+        loading="lazy"
+        decoding="async"
+        src={`/${name}.jpg`}
+        alt={alt}
+        data-name={name}
+        data-index={index}
+    />
+</picture>
