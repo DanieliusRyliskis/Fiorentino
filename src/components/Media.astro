@@ -1,7 +1,5 @@
 ---
-import { Image } from 'astro:assets';
 import { Picture } from 'astro:assets';
-import ImageComponent from './ImageComponent.astro';
 
 interface Props {
     language: string;
@@ -71,29 +69,18 @@ const right = sortOldest('Right (Horizontal)');
     </h3>
     <!-- 2xl:w-fit -->
     <div
-        class="flex flex-col lg:flex-row gap-4 w-fit lg:w-[95%] mx-auto mb-[clamp(4rem,_3.2rem_+_4vw,_8rem)] border-2 border-blue-500"
+        class="flex flex-col lg:flex-row gap-4 w-fit lg:w-[95%] mx-auto mb-[clamp(4rem,_3.2rem_+_4vw,_8rem)] xl:max-w-[83.5rem]"
         id="imageContainer"
     >
-    <!-- Performance 81 -->
-    <!-- Performance 82 w/o Gallery -->
-
-        <div class="flex flex-col w-[90%] mx-auto gap-4 border-2 border-red-500">
-            <!--
-            <ImageComponent
-                name="Gallery_1"
-                size="lg:h-[21.563rem]"
-                alt={`${renderContent()[1]} 1`}
-                index={1}
-            />
-            -->
-
+        <div class="flex flex-col w-[90%] mx-auto gap-4 xl:max-w-[28.75rem]">
+        <!-- If the container's dimensions (width and height) are unclear or dynamic due to max-w, it might seem like object-cover isn't working.  -->
             {
                 left.map((c) => (
                     <Picture
                         src={images[c.file_path].default}
                         widths={[600, 900]}
                         sizes={"(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 64em) 900px, (min-width: 64.063em) 600px"}
-                        class="w-full lg:h-[21.563rem] lg:object-cover cursor-pointer"
+                        class={`w-full lg:h-[21.563rem] lg:object-cover cursor-pointer`}
                         alt={c.title}
                         formats={['avif', 'webp']}
                         fallbackFormat="jpg"
@@ -102,25 +89,14 @@ const right = sortOldest('Right (Horizontal)');
                 ))
             }
         </div>
-
-
-        <!-- Place Where Vertical Images Are Rendered -->
-        <div class="flex flex-col w-[90%] mx-auto gap-4">
-            <!--
-            <ImageComponent
-                name="Gallery_2"
-                size="lg:h-[43.875rem]"
-                alt={`${renderContent()[1]} 2`}
-                index={2}
-            />
-            -->
+        <div class="flex flex-col w-[90%] mx-auto gap-4 xl:max-w-[23.75rem]">
             {
                 middle.map((c) => (
                     <Picture
                         src={images[c.file_path].default}
-                        class="w-full lg:h-[43.875rem] lg:object-cover cursor-pointer"
                         widths={[600, 900]}
                         sizes={"(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 64em) 900px, (min-width: 64.063em) 600px"}
+                        class="w-full lg:h-[43.875rem] lg:object-cover cursor-pointer aspec"
                         alt={c.title}
                         formats={['avif', 'webp']}
                         fallbackFormat="jpg"
@@ -130,22 +106,15 @@ const right = sortOldest('Right (Horizontal)');
             }
         </div>
 
-        <div class="flex flex-col w-[90%] mx-auto gap-4">
-            <!--
-            <ImageComponent
-                name="Gallery_3"
-                size="lg:h-[21.563rem]"
-                alt={`${renderContent()[1]} 3`}
-                index={3}
-            />
-            -->
+        <div class="flex flex-col w-[90%] mx-auto gap-4 xl:max-w-[28.75rem]">
             {
                 right.map((c) => (
                     <Picture
                         src={images[c.file_path].default}
                         widths={[600, 900]}
                         sizes={"(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 64em) 900px, (min-width: 64.063em) 600px"}
-                        class="w-full lg:h-[21.563rem] lg:object-cover cursor-pointer"
+                        class={`w-full lg:h-[21.563rem] lg:object-cover cursor-pointer`}
+                        alt={c.title}
                         alt={c.title}
                         formats={['avif', 'webp']}
                         fallbackFormat="jpg"
@@ -163,7 +132,6 @@ const right = sortOldest('Right (Horizontal)');
     >
     </div>
     <!-- Gallery Interface -->
-    <!-- Maybe Use Grid Next Time -->
     <div
         class="hidden fixed z-50 w-screen h-screen top-0 left-0"
         id="interface"
@@ -192,3 +160,5 @@ const right = sortOldest('Right (Horizontal)');
         <div class="w-full h-full" id="background"></div>
     </div>
 </section>
+
+
