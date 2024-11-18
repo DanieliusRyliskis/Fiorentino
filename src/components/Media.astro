@@ -49,19 +49,33 @@ const images = await import.meta.glob('/src/assets/pictures/*.jpg', {
 // Without await Promise.allSettled Would Return Array Of Promises
 // You Can Use Top-Level Await If It's ES Module
 
-const promises = frontmatter.map((data) =>
-    getImage({
+const promises = frontmatter.map(async (data) => {
+    const getImageData = await getImage({
         src: images[data.file_path].default,
         format: 'avif',
         widths: [600, 900, images[data.file_path].default.width],
         quality: 'high',
-    }),
+    });
+        return {
+        ...getImageData,
+        publish_date: data.publish_date,
+        category: data.category,
+        }}
 );
+
+const check = frontmatter.map((data) => {
+        // console.log(images)
+        return images[data.file_path].default.src
+        })
+
+// console.log(check[0])
+
 const results = await Promise.allSettled(promises);
 const errors = results.filter((result) => result.status === "rejected")
-const fulfilled = results.filter((result) => result.status === "fulfilled").map((result) => result.value.srcSet)
+const fulfilled = results.filter((result) => result.status === "fulfilled").map((result) => result.value)
 
 console.log(fulfilled)
+
 if (errors.length > 0) {
     errors.forEach((error) => console.log(`Error: ${error.reason.title}`))
 }
