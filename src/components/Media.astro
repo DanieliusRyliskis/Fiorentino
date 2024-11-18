@@ -1,5 +1,5 @@
 ---
-import { Picture } from 'astro:assets';
+import { getImage } from 'astro:assets';
 
 interface Props {
     language: string;
@@ -41,11 +41,31 @@ const renderContent = () => {
 
 // File Sorting
 const markdowns = await Astro.glob('/src/assets/pictures/*.md');
+const frontmatter = markdowns.map((f) => f.frontmatter);
 const images = await import.meta.glob('/src/assets/pictures/*.jpg', {
     eager: true,
 });
 
-const frontmatter = markdowns.map((f) => f.frontmatter);
+// Without await Promise.allSettled Would Return Array Of Promises
+// You Can Use Top-Level Await If It's ES Module
+
+const promises = frontmatter.map((data) =>
+    getImage({
+        src: images[data.file_path].default,
+        format: 'avif',
+        widths: [600, 900, images[data.file_path].default.width],
+        quality: 'high',
+    }),
+);
+const results = await Promise.allSettled(promises);
+const errors = results.filter((result) => result.status === "rejected")
+const fulfilled = results.filter((result) => result.status === "fulfilled").map((result) => result.value.srcSet)
+
+console.log(fulfilled)
+if (errors.length > 0) {
+    errors.forEach((error) => console.log(`Error: ${error.reason.title}`))
+}
+
 
 const sortOldest = function (categoryName) {
     const filtered = frontmatter.filter(
@@ -59,6 +79,8 @@ const sortOldest = function (categoryName) {
 const left = sortOldest('Left (Horizontal)');
 const middle = sortOldest('Middle (Vertical)');
 const right = sortOldest('Right (Horizontal)');
+
+// Could Create Avifs, Webps, Jpegs And The Use Them In Picture Component
 ---
 
 <section id="section4">
@@ -67,63 +89,6 @@ const right = sortOldest('Right (Horizontal)');
     >
         {renderContent()[0]}
     </h3>
-    <!-- 2xl:w-fit -->
-    <div
-        class="flex flex-col lg:flex-row gap-4 w-fit lg:w-[95%] mx-auto mb-[clamp(4rem,_3.2rem_+_4vw,_8rem)] xl:max-w-[83.5rem]"
-        id="imageContainer"
-    >
-        <div class="flex flex-col w-[90%] mx-auto gap-4 xl:max-w-[28.75rem]">
-        <!-- If the container's dimensions (width and height) are unclear or dynamic due to max-w, it might seem like object-cover isn't working.  -->
-            {
-                left.map((c) => (
-                    <Picture
-                        src={images[c.file_path].default}
-                        widths={[600, 900]}
-                        sizes={"(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 64em) 900px, (min-width: 64.063em) 600px"}
-                        class={`w-full lg:h-[21.563rem] lg:object-cover cursor-pointer`}
-                        alt={c.title}
-                        formats={['avif', 'webp']}
-                        fallbackFormat="jpg"
-                        quality={'high'}
-                    />
-                ))
-            }
-        </div>
-        <div class="flex flex-col w-[90%] mx-auto gap-4 xl:max-w-[23.75rem]">
-            {
-                middle.map((c) => (
-                    <Picture
-                        src={images[c.file_path].default}
-                        widths={[600, 900]}
-                        sizes={"(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 64em) 900px, (min-width: 64.063em) 600px"}
-                        class="w-full lg:h-[43.875rem] lg:object-cover cursor-pointer aspec"
-                        alt={c.title}
-                        formats={['avif', 'webp']}
-                        fallbackFormat="jpg"
-                        quality={'high'}
-                    />
-                ))
-            }
-        </div>
-
-        <div class="flex flex-col w-[90%] mx-auto gap-4 xl:max-w-[28.75rem]">
-            {
-                right.map((c) => (
-                    <Picture
-                        src={images[c.file_path].default}
-                        widths={[600, 900]}
-                        sizes={"(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 64em) 900px, (min-width: 64.063em) 600px"}
-                        class={`w-full lg:h-[21.563rem] lg:object-cover cursor-pointer`}
-                        alt={c.title}
-                        alt={c.title}
-                        formats={['avif', 'webp']}
-                        fallbackFormat="jpg"
-                        quality={'high'}
-                    />
-                ))
-            }
-        </div>
-    </div>
 
     <!-- Modal Window -->
     <div
@@ -160,5 +125,3 @@ const right = sortOldest('Right (Horizontal)');
         <div class="w-full h-full" id="background"></div>
     </div>
 </section>
-
-
