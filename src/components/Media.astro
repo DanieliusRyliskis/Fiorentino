@@ -1,5 +1,6 @@
 ---
 import { getImage } from 'astro:assets';
+import Gallery from './Gallery.jsx'
 
 interface Props {
     language: string;
@@ -39,62 +40,101 @@ const renderContent = () => {
     }
 };
 
-// File Sorting
-const markdowns = await Astro.glob('/src/assets/pictures/*.md');
-const frontmatter = markdowns.map((f) => f.frontmatter);
-const images = await import.meta.glob('/src/assets/pictures/*.jpg', {
-    eager: true,
-});
+const generateImages = async function () {
+    try {
+        // Imports Markdown Files
+        const markdowns = await Astro.glob('/src/assets/pictures/*.md');
+        // Access The Frontmatter Of Markdown Files
+        const frontmatter = markdowns.map((f) => f.frontmatter);
+        // Imports Images From src/ Directory
+        // Don't Need An Await Because eager:true Makes The Import Resolve Immediately
+        const images = import.meta.glob('/src/assets/pictures/*.jpg', {
+            eager: true,
+        });
 
-// Without await Promise.allSettled Would Return Array Of Promises
-// You Can Use Top-Level Await If It's ES Module
+        const optimizedImages = {
+            avif: {
+                left: [],
+                middle: [],
+                right: [],
+            },
+            webp: {
+                left: [],
+                middle: [],
+                right: [],
+            },
+            jpg: {
+                left: [],
+                middle: [],
+                right: [],
+            },
+        };
 
-const promises = frontmatter.map(async (data) => {
-    const getImageData = await getImage({
-        src: images[data.file_path].default,
-        format: 'avif',
-        widths: [600, 900, images[data.file_path].default.width],
-        quality: 'high',
-    });
-        return {
-        ...getImageData,
-        publish_date: data.publish_date,
-        category: data.category,
-        }}
-);
+        const formats = ['avif', 'webp', 'jpg'];
 
-const check = frontmatter.map((data) => {
-        // console.log(images)
-        return images[data.file_path].default.src
-        })
+        // Loops Through Different Formats And Adds Them To optimizedImages Object
+        for (const format of formats) {
+            const promises = frontmatter.map(async (data) => {
+                const getImageData = await getImage({
+                    src: images[data.image].default,
+                    format: format,
+                    widths: [600, 900, images[data.image].default.width],
+                    quality: 'high',
+                });
+                // Adds Metadata From Markdown To getImageData Object
+                return {
+                    ...getImageData,
+                    category: data.category,
+                    publish_date: data.publish_date,
+                };
+            });
 
-// console.log(check[0])
+            // Without await Promise.allSettled Would Return Array Of Promises
+            const results = await Promise.allSettled(promises);
 
-const results = await Promise.allSettled(promises);
-const errors = results.filter((result) => result.status === "rejected")
-const fulfilled = results.filter((result) => result.status === "fulfilled").map((result) => result.value)
+            // Filters Out Rejected And Fullfilled Promises
+            const errors = results.filter(
+                (result) => result.status === 'rejected',
+            );
+            const fulfilled = results
+                .filter((result) => result.status === 'fulfilled')
+                .map((result) => result.value);
 
-console.log(fulfilled)
+            // Prints Out An Error From A Rejected Promise
+            if (errors.length > 0) {
+                errors.forEach((error) =>
+                    console.error(`Error: ${error.reason.title}`),
+                );
+            }
 
-if (errors.length > 0) {
-    errors.forEach((error) => console.log(`Error: ${error.reason.title}`))
-}
+            // Filters An Array Of Objects By Their Category Name And Then Sorts Them By Date From Oldest To Newest
+            const sortOldest = function (categoryName) {
+                const filtered = fulfilled.filter(
+                    (imgObj) => imgObj.category === categoryName,
+                );
+                const sorted = filtered.sort((a, b) =>
+                    a.publish_date.localeCompare(b.publish_date),
+                );
+                return sorted;
+            };
 
+            // Adds Currently Iterated Format That Is Filtered By Category And Sorted By Date To optimizedImages Object
+            const left = sortOldest('Left (Horizontal)');
+            optimizedImages[format].left = left;
+            const middle = sortOldest('Middle (Vertical)');
+            optimizedImages[format].middle = middle;
+            const right = sortOldest('Right (Horizontal)');
+            optimizedImages[format].right = right;
+        }
 
-const sortOldest = function (categoryName) {
-    const filtered = frontmatter.filter(
-        (file) => file.category === categoryName,
-    );
-    const sorted = filtered.sort((a, b) =>
-        a.publish_date.localeCompare(b.publish_date),
-    );
-    return sorted;
+        return optimizedImages;
+    } catch (error) {
+        console.error(error);
+    }
 };
-const left = sortOldest('Left (Horizontal)');
-const middle = sortOldest('Middle (Vertical)');
-const right = sortOldest('Right (Horizontal)');
 
-// Could Create Avifs, Webps, Jpegs And The Use Them In Picture Component
+const content = renderContent()
+const optimizedImages = await generateImages();
 ---
 
 <section id="section4">
@@ -103,6 +143,7 @@ const right = sortOldest('Right (Horizontal)');
     >
         {renderContent()[0]}
     </h3>
+        <Gallery client:visible optimizedImages={optimizedImages}/>     
 
     <!-- Modal Window -->
     <div

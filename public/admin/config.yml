@@ -2,17 +2,18 @@ backend:
   name: "git-gateway"
   branch: "main" # Branch to update (optional; defaults to master)
 
-media_folder: "src/assets" # Specifies where uploaded files are saved in the repo
-# public_folder: "/assets" # public_folder indicates where they are found in the published site.
+media_folder: "src/assets/" # Specifies where uploaded files are saved in the repo
+# public_folder: "/src/assets" # public_folder indicates where they are found in the published site.
 # If public_folder is not set, Decap CMS defaults to the same value as media_folder, adding an opening / if one is not included.
 
 # Array named collections
 collections:
   # First item of an Array
-  - name: "meniu" # Used in routes, e.g., /admin/collections/blog
-    label: "Meniu" # Used in the UI
-    folder: "public/menu" # Where the .md files are stored, relative to the repo root. 
+  - name: "menu" # Used in routes, e.g., /admin/collections/blog
+    label: "Menu" # Used in the UI
+    folder: "src/assets/menu" # Where the .md files are stored, relative to the repo root. 
     create: true # Allow users to create new documents in this collection
+    # identifier_field: category # Uses category as a identifier
     slug: "{{year}}-{{month}}-{{day}}-menu" # Filename template, e.g., YYYY-MM-DD-h-m -title.md
     # Each field represents a type of content a user can input.
     # It's an Array of Objects
@@ -22,9 +23,9 @@ collections:
       - { label: "Title", name: "title", widget: "string"}
       - { label: "Category", name: "category", options: ["Patiekalai", "Vynai"], widget: "select"}
       - { label: "Publish Date", name: "publish_date", default: "{{now}}", widget: "datetime"}
-      - { label: "PDF Upload", name: "file_path", widget: "file", choose_url: false, media_folder: "/public/menu"}
-  - name: "galerija" # Used in routes, e.g., /admin/collections/blog
-    label: "Galerija" # Used in the UI
+      - { label: "PDF Upload", name: "file_path", widget: "file", choose_url: false, media_folder: "/src/assets/menu"}
+  - name: "gallery" # Used in routes, e.g., /admin/collections/blog
+    label: "Gallery" # Used in the UI
     folder: "src/assets/pictures" # Where the .md files are stored, relative to the repo root. 
     create: true # Allow users to create new documents in this collection
     slug: "{{year}}-{{month}}-{{day}}-gallery" # Filename template, e.g., YYYY-MM-DD-h-m -title.md
@@ -36,5 +37,5 @@ collections:
       - { label: "Title", name: "title", widget: "string"}
       - { label: "Position and Orientation", name: "category", options: ["Left (Horizontal)", "Middle (Vertical)", Right (Horizontal)], widget: "select"}
       - { label: "Publish Date", name: "publish_date", default: "{{now}}", widget: "datetime"}
-      - { label: "Image Upload", name: "file_path", widget: "file", choose_url: false, media_folder: "/src/assets/pictures"}
+      - { label: "Featured image", name: "image", widget: "image", choose_url: false, media_folder: "/src/assets/pictures"}
 
