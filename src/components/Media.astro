@@ -145,38 +145,4 @@ const optimizedImages = await generateImages();
     </h3>
         <Gallery client:visible optimizedImages={optimizedImages}/>     
 
-    <!-- Modal Window -->
-    <div
-        class="hidden fixed z-20 top-0 left-0 w-screen h-screen bg-black opacity-50"
-        id="modal"
-    >
-    </div>
-    <!-- Gallery Interface -->
-    <div
-        class="hidden fixed z-50 w-screen h-screen top-0 left-0"
-        id="interface"
-    >
-        <img
-            class="absolute top-[2%] right-[2%] cursor-pointer"
-            src="/svg/Close.svg"
-            id="closeIcon"
-            alt={renderContent()[2]}
-            decoding="async"
-        />
-        <img
-            class="absolute top-1/2 translate-y-[-50%] left-[5%] hidden lg:inline-block cursor-pointer"
-            src="/svg/Arrow_left.svg"
-            id="arrowLeft"
-            alt={renderContent()[3]}
-            decoding="async"
-        />
-        <img
-            class="absolute top-1/2 translate-y-[-50%] right-[5%] hidden lg:inline-block cursor-pointer"
-            src="/svg/Arrow_right.svg"
-            id="arrowRight"
-            alt={renderContent()[4]}
-            decoding="async"
-        />
-        <div class="w-full h-full" id="background"></div>
-    </div>
 </section>

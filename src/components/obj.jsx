@@ -1,3 +1,20 @@
+// const optimizedImages = {
+//     avif: {
+//         left: [{..}{..}],
+//         middle: [],
+//         right: [],
+//     },
+//     webp: {
+//         left: [],
+//         middle: [],
+//         right: [],
+//     },
+//     jpg: {
+//         left: [],
+//         middle: [],
+//         right: [],
+//     },
+// };
 // {
 //     "rawOptions": {
 //         "src": {
