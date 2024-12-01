@@ -1,20 +1,20 @@
-// const optimizedImages = {
-//     avif: {
-//         left: [{..}{..}],
-//         middle: [],
-//         right: [],
-//     },
-//     webp: {
-//         left: [],
-//         middle: [],
-//         right: [],
-//     },
-//     jpg: {
-//         left: [],
-//         middle: [],
-//         right: [],
-//     },
-// };
+    // const optimizedImages = {
+    //     avif: {
+    //         left: [{..}{..}],
+    //         middle: [],
+    //         right: [],
+    //     },
+    //     webp: {
+    //         left: [],
+    //         middle: [],
+    //         right: [],
+    //     },
+    //     jpg: {
+    //         left: [],
+    //         middle: [],
+    //         right: [],
+    //     },
+    // };
 // {
 //     "rawOptions": {
 //         "src": {
@@ -129,3 +129,7 @@
 //     "category": "Left (Horizontal)",
 //     "publish_date": "2024-11-19T18:19:00.000Z"
 // }
+//
+    //
+
+

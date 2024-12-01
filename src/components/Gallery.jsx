@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 function Gallery(props) {
+
     const [modalOpened, setModalOpened] = useState(false);
-    const [loading, setLoading] = useState(true);
     const [position, setPosition] = useState('');
     const [index, setIndex] = useState('');
+
+    console.log(`${position} ${index}`)
 
     // if modalOpened === true then listen to key events
     useEffect(() => {
@@ -19,26 +21,61 @@ function Gallery(props) {
         // Cleanup Later
     }, [modalOpened]);
 
+
     const closeModal = function () {
         setModalOpened(false);
     };
 
+    const switchImage = function (direction){
+        if (direction === 'Backwards'){
+            if (position === 'left'){
+                // Conditional To Check Whether Or Not It's The First Image
+                if (index === 0) {
+                    return
+                } else {
+                    setPosition('right')
+                    setIndex(i => i - 1)
+                }
+            } else if (position === 'middle'){
+                setPosition('left')
+                setIndex(i => i * 2)
+            } else if (position === 'right'){
+                // If The Index Is An Even Number Go To The Middle Position
+                if (index % 2 === 0){
+                    setPosition('middle')
+                    setIndex(i => i / 2)
+                } else {
+                    setPosition('left')
+                }
+            }
+        } else if (direction === 'Forwards'){
+            if (position === 'left'){
+                // If The Index Is An Even Number Go To The Middle Position
+                if (index % 2 === 0){
+                    setPosition('middle')
+                    setIndex(i => i / 2)
+                } else {
+                    setPosition('right')
+                }
+            } else if (position === 'middle'){
+                setPosition('right')
+                setIndex(i => i * 2)
+            } else if (position === 'right'){
+                // Conditional To Check Whether Or Not It's The Last Image
+                if (index === props.optimizedImages.jpg.right.length - 1) {
+                    return
+                } else {
+                    setPosition('left')
+                    setIndex(i => i + 1)
+                }
+            }
+        }
+    }
+
     const preview = function (e) {
         setModalOpened(true);
         setPosition(e.target.dataset.position);
-        setIndex(e.target.dataset.index);
-        // Index Will Change
-        // let index = e.target.dataset.index;
-        console.log(`${position} ${index}`);
-        // middle 2 -> right 2 - left 3
-        // if left index is an odd number than skip the middle when going forwards
-        // if right index is also an odd number than skip the middle when going backwards
-        const positions = ['left', 'middle', 'right'];
-        // Function For Going To The Next Image
-        // const arrayIndex = positions.indexOf(position);
-        // const nextArrayIndex = (arrayIndex + 1) % positions.length;
-        // const nextPosition = positions[nextArrayIndex];
-        // Generate Modal
+        setIndex(Number(e.target.dataset.index));
     };
 
     const genPicture = function (position, height) {
@@ -117,7 +154,10 @@ function Gallery(props) {
                             alt=""
                             decoding="async"
                         />
-                        {!loading ? (
+                        {/* Could Be Improved With Loading Image In The Background */}
+                        { props.optimizedImages.jpg[position][index] &&                         
+                          props.optimizedImages.webp[position][index] ? (
+
                             <picture>
                                 <source
                                     srcSet={
@@ -143,48 +183,17 @@ function Gallery(props) {
                                     }
                                     className="absolute max-w-[85%] max-h-[80%] left-1/2 translate-x-[-50%] top-1/2 translate-y-[-50%]"
                                     decoding="async"
-                                    onLoad={() => setLoading(false)}
                                     alt=""
                                 />
                             </picture>
-                        ) : (
-                            <picture>
-                                <source
-                                    srcSet={
-                                        props.optimizedImages.avif[position][index]
-                                            .srcSet.attribute
-                                    }
-                                    sizes="(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 80em) 900px, 600px"
-                                    type="image/avif"
-                                />
-                                <source
-                                    srcSet={
-                                        props.optimizedImages.webp[position][index]
-                                            .srcSet.attribute
-                                    }
-                                    sizes="(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 80em) 900px, 600px"
-                                    type="image/webp"
-                                />
-                                <img
-                                    src={
-                                        props.optimizedImages.jpg[position][index]
-                                            .src
-                                    }
-                                    srcSet={
-                                        props.optimizedImages.jpg[position][index]
-                                            .srcSet.attribute
-                                    }
-                                    sizes="(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 80em) 900px, 600px"
-                                    className="absolute max-w-[85%] max-h-[80%] left-1/2 translate-x-[-50%] top-1/2 translate-y-[-50%]"
-                                    decoding="async"
-                                    alt=""
-                                />
-                            </picture>
-                        )}
+
+                          ): null
+                        }
                         <img
                             className="absolute top-1/2 translate-y-[-50%] left-[5%] hidden lg:inline-block cursor-pointer"
                             src="/svg/Arrow_left.svg"
                             id="arrowLeft"
+                            onClick={() => switchImage('Backwards')}
                             alt=""
                             decoding="async"
                         />
@@ -192,6 +201,7 @@ function Gallery(props) {
                             className="absolute top-1/2 translate-y-[-50%] right-[5%] hidden lg:inline-block cursor-pointer"
                             src="/svg/Arrow_right.svg"
                             id="arrowRight"
+                            onClick={() => switchImage('Forwards')}
                             alt=""
                             decoding="async"
                         />
