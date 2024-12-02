@@ -29,6 +29,8 @@ const renderContent = () => {
         return content;
     }
 };
+
+const content = renderContent()
 ---
 
 <section
@@ -39,13 +41,13 @@ const renderContent = () => {
         <!-- Change my -->
         <div class="max-w-xl my-8 mx-4">
             <h1 class="cormorant-garamond-regular text-5xl pb-4">
-                {renderContent()[0]}
+                {content[0]}
             </h1>
             <a
                 class="merriweather-light text-lg text-white bg-secondary inline-block cursor-pointer py-3 px-6 lg:py-3.5 lg:px-10
                 lg:border-2 lg:border-secondary lg:hover:text-secondary lg:hover:bg-transparent lg:hover:duration-500 lg:hover:transition-colors lg:hover:ease-in-out"
                 href="#section5"
-                id="callToAction">{renderContent()[1]}</a
+                id="callToAction">{content[1]}</a
             >
         </div>
     </div>
@@ -56,7 +58,7 @@ const renderContent = () => {
             loading="lazy"
             decoding="async"
             src="/Hero_image.jpg"
-            alt={renderContent()[2]}
+            alt={content[2]}
         />
     </picture>
 </section>

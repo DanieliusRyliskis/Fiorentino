@@ -141,8 +141,8 @@ const optimizedImages = await generateImages();
     <h3
         class="cormorant-garamond-regular text-header text-3xl text-center section-padding"
     >
-        {renderContent()[0]}
+        {content[0]}
     </h3>
-        <Gallery client:visible optimizedImages={optimizedImages}/>     
+        <Gallery client:visible optimizedImages={optimizedImages} content={content}/>     
 
 </section>

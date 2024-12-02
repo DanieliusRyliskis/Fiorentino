@@ -57,6 +57,8 @@ const renderContent = () => {
         return content;
     }
 };
+
+const content = renderContent()
 ---
 
 <footer class="bg-secondary text-white" id="section5">
@@ -66,7 +68,7 @@ const renderContent = () => {
         <a class="lg:col-[1/4]" href="#section1">
             <img
                 src="/svg/Logo_white.svg"
-                alt={renderContent().alt[0]}
+                alt={content.alt[0]}
                 class="cursor-pointer mx-auto lg:mx-0"
                 id="logoFooter"
                 loading="lazy"
@@ -78,7 +80,7 @@ const renderContent = () => {
             class="flex items-center justify-center py-4 lg:inline-block lg:col-[1/4]"
         >
             <p class="max-w-[15.313rem]">
-                {renderContent().text[0]}
+                {content.text[0]}
             </p>
         </div>
         <!-- Links Flexbox Container -->
@@ -88,24 +90,24 @@ const renderContent = () => {
             <!-- Section 1 -->
             <div>
                 <h3 class="text-center text-lg py-4">
-                    {renderContent().text[1]}
+                    {content.text[1]}
                 </h3>
                 <ul id="browse">
                     <li class="text-center text-nowrap lg:text-left py-2">
-                        <a href="#section2">{renderContent().text[2]}</a>
+                        <a href="#section2">{content.text[2]}</a>
                     </li>
                     <li class="text-center text-nowrap lg:text-left py-2">
-                        <a href="#section3">{renderContent().text[3]}</a>
+                        <a href="#section3">{content.text[3]}</a>
                     </li>
                     <li class="text-center text-nowrap lg:text-left py-2">
-                        <a href="#section4">{renderContent().text[4]}</a>
+                        <a href="#section4">{content.text[4]}</a>
                     </li>
                 </ul>
             </div>
             <!-- Section 2 -->
             <div>
                 <h3 class="text-center text-lg py-4 lg:text-left">
-                    {renderContent().text[5]}
+                    {content.text[5]}
                 </h3>
                 <ul>
                     <div>
@@ -136,7 +138,7 @@ const renderContent = () => {
             <!-- Section 3 -->
             <div>
                 <h3 class="text-center text-lg py-4 lg:text-left">
-                    {renderContent().text[6]}
+                    {content.text[6]}
                 </h3>
                 <ul>
                     <li class="text-center lg:text-left py-2">
@@ -171,7 +173,7 @@ const renderContent = () => {
                 <img
                     class="w-8 h-auto"
                     src="/svg/Facebook.svg"
-                    alt={renderContent().alt[1]}
+                    alt={content.alt[1]}
                     alt="facebook piktograma"
                     loading="lazy"
                     decoding="async"
@@ -185,7 +187,7 @@ const renderContent = () => {
                 <img
                     class="w-8 h-auto"
                     src="/svg/Instagram.svg"
-                    alt={renderContent().alt[2]}
+                    alt={content.alt[2]}
                     loading="lazy"
                     decoding="async"
                 />
@@ -194,7 +196,7 @@ const renderContent = () => {
     </div>
     <div class="bg-[#2F2C24] py-3">
         <h5 class="text-center text-sm">
-            {renderContent().text[7]}<span id="copyright"></span>.
+            {content.text[7]}<span id="copyright"></span>.
         </h5>
     </div>
 </footer>

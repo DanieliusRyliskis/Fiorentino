@@ -31,6 +31,8 @@ const renderContent = () => {
         return content;
     }
 };
+
+const content = renderContent()
 ---
 
 <section class="bg-primary" id="section2">
@@ -39,22 +41,22 @@ const renderContent = () => {
             “
         </p>
         <p>
-            {renderContent()[0]}
+            {content[0]}
         </p>
         <br />
         <p>
-            {renderContent()[1]}
+            {content[1]}
         </p>
         <br />
         <p>
-            {renderContent()[2]}
+            {content[2]}
         </p>
         <br />
         <!-- () Groups Multiline Expressions -->
         {
             language !== 'it' ? (
                 <>
-                    <p>{renderContent()[3]}</p>
+                    <p>{content[3]}</p>
                     <br />
                 </>
             ) : null

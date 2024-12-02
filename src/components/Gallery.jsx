@@ -2,75 +2,80 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 function Gallery(props) {
-
     const [modalOpened, setModalOpened] = useState(false);
     const [position, setPosition] = useState('');
     const [index, setIndex] = useState('');
 
-    console.log(`${position} ${index}`)
+    const switchImage = (direction) => {
+        if (direction === 'Backwards') {
+            if (position === 'left') {
+                // Conditional To Check Whether Or Not It's The First Image
+                if (index === 0) {
+                    return;
+                } else {
+                    setPosition('right');
+                    setIndex((i) => i - 1);
+                }
+            } else if (position === 'middle') {
+                setPosition('left');
+                setIndex((i) => i * 2);
+            } else if (position === 'right') {
+                // If The Index Is An Even Number Go To The Middle Position
+                if (index % 2 === 0) {
+                    setPosition('middle');
+                    setIndex((i) => i / 2);
+                } else {
+                    setPosition('left');
+                }
+            }
+        } else if (direction === 'Forwards') {
+            if (position === 'left') {
+                // If The Index Is An Even Number Go To The Middle Position
+                if (index % 2 === 0) {
+                    setPosition('middle');
+                    setIndex((i) => i / 2);
+                } else {
+                    setPosition('right');
+                }
+            } else if (position === 'middle') {
+                setPosition('right');
+                setIndex((i) => i * 2);
+            } else if (position === 'right') {
+                // Conditional To Check Whether Or Not It's The Last Image
+                if (index === props.optimizedImages.jpg.right.length - 1) {
+                    return;
+                } else {
+                    setPosition('left');
+                    setIndex((i) => i + 1);
+                }
+            }
+        }
+    };
 
-    // if modalOpened === true then listen to key events
     useEffect(() => {
+        const handleKeyPress = (event) => {
+            console.log(event.key);
+            if (event.key === 'ArrowRight') {
+                switchImage('Forwards');
+            } else if (event.key === 'ArrowLeft') {
+                switchImage('Backwards');
+            } else if (event.key === 'Escape') {
+                setModalOpened(false);
+            }
+        };
+
         if (modalOpened) {
             document.body.style.height = '100%';
             document.body.style.overflow = 'hidden';
-        } else if (!modalOpened) {
+            window.addEventListener('keydown', handleKeyPress);
+        }
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
             document.body.style.height = '';
             document.body.style.overflow = '';
-        }
-        // Cleanup Later
-    }, [modalOpened]);
-
-
-    const closeModal = function () {
-        setModalOpened(false);
-    };
-
-    const switchImage = function (direction){
-        if (direction === 'Backwards'){
-            if (position === 'left'){
-                // Conditional To Check Whether Or Not It's The First Image
-                if (index === 0) {
-                    return
-                } else {
-                    setPosition('right')
-                    setIndex(i => i - 1)
-                }
-            } else if (position === 'middle'){
-                setPosition('left')
-                setIndex(i => i * 2)
-            } else if (position === 'right'){
-                // If The Index Is An Even Number Go To The Middle Position
-                if (index % 2 === 0){
-                    setPosition('middle')
-                    setIndex(i => i / 2)
-                } else {
-                    setPosition('left')
-                }
-            }
-        } else if (direction === 'Forwards'){
-            if (position === 'left'){
-                // If The Index Is An Even Number Go To The Middle Position
-                if (index % 2 === 0){
-                    setPosition('middle')
-                    setIndex(i => i / 2)
-                } else {
-                    setPosition('right')
-                }
-            } else if (position === 'middle'){
-                setPosition('right')
-                setIndex(i => i * 2)
-            } else if (position === 'right'){
-                // Conditional To Check Whether Or Not It's The Last Image
-                if (index === props.optimizedImages.jpg.right.length - 1) {
-                    return
-                } else {
-                    setPosition('left')
-                    setIndex(i => i + 1)
-                }
-            }
-        }
-    }
+        };
+    }, [modalOpened, switchImage]);
 
     const preview = function (e) {
         setModalOpened(true);
@@ -111,7 +116,7 @@ function Gallery(props) {
                         onClick={(e) => preview(e)}
                         data-position={position}
                         data-index={i}
-                        alt=""
+                        alt={props.content[1]}
                     />
                 </picture>,
             );
@@ -150,14 +155,13 @@ function Gallery(props) {
                             className="absolute top-[2%] right-[2%] cursor-pointer"
                             src="/svg/Close.svg"
                             id="closeIcon"
-                            onClick={closeModal}
-                            alt=""
+                            onClick={() => setModalOpened(false)}
+                            alt={props.content[2]}
                             decoding="async"
                         />
                         {/* Could Be Improved With Loading Image In The Background */}
-                        { props.optimizedImages.jpg[position][index] &&                         
-                          props.optimizedImages.webp[position][index] ? (
-
+                        {props.optimizedImages.jpg[position][index] &&
+                        props.optimizedImages.webp[position][index] ? (
                             <picture>
                                 <source
                                     srcSet={
@@ -183,18 +187,16 @@ function Gallery(props) {
                                     }
                                     className="absolute max-w-[85%] max-h-[80%] left-1/2 translate-x-[-50%] top-1/2 translate-y-[-50%]"
                                     decoding="async"
-                                    alt=""
+                                    alt={props.content[1]}
                                 />
                             </picture>
-
-                          ): null
-                        }
+                        ) : null}
                         <img
                             className="absolute top-1/2 translate-y-[-50%] left-[5%] hidden lg:inline-block cursor-pointer"
                             src="/svg/Arrow_left.svg"
                             id="arrowLeft"
                             onClick={() => switchImage('Backwards')}
-                            alt=""
+                            alt={props.content[3]}
                             decoding="async"
                         />
                         <img
@@ -202,10 +204,10 @@ function Gallery(props) {
                             src="/svg/Arrow_right.svg"
                             id="arrowRight"
                             onClick={() => switchImage('Forwards')}
-                            alt=""
+                            alt={props.content[4]}
                             decoding="async"
                         />
-                        {/* <div className="w-full h-full" id="background"></div> */}
+                        <div className="w-full h-full" id="background" onClick={() => setModalOpened(false)}></div>
                     </div>
                 </>
             )}
