@@ -1,0 +1,146 @@
+---
+interface Props {
+    language: string;
+}
+
+const { language } = Astro.props;
+
+const renderContent = () => {
+    if (language === 'lt') {
+        const content = {
+            text: ['Meniu', 'Patiekalai', 'Vynai'],
+            alt: ['Makaronų nuotrauka', 'Vyno nuotrauka'],
+        };
+        return content;
+    } else if (language === 'en') {
+        const content = {
+            text: ['Menu', 'Dishes', 'Wines'],
+            alt: ['Picture of a bowl of pasta', 'Picture of a glass of wine'],
+        };
+        return content;
+    } else if (language === 'it') {
+        const content = {
+            text: ['Menu', 'Piatti', 'Vini'],
+            alt: [
+                'Immagine di un piatto di pasta',
+                'Immagine di un bicchiere di vino',
+            ],
+        };
+        return content;
+    }
+};
+
+const getPDFs = async function () {
+    try {
+        const markdowns = await Astro.glob('/src/assets/menu/*.md');
+        const frontmatter = markdowns.map((f) => f.frontmatter);
+
+        const sortLatest = function (categoryName) {
+            const filtered = frontmatter.filter(
+                (file) => file.category === categoryName,
+            );
+            const sorted = filtered.sort((a, b) =>
+                b.publish_date.localeCompare(a.publish_date),
+            );
+            return sorted;
+        };
+
+        const dishes = sortLatest('Patiekalai');
+        const wines = sortLatest('Vynai');
+
+        const PDFs = {
+            dishes: '',
+            wines: '',
+        };
+
+        PDFs.dishes = dishes[0].file_path.replace('/public', '');
+        PDFs.wines = wines[0].file_path.replace('/public', '');
+
+        return PDFs;
+    } catch (error) {
+        console.error(error);
+
+        const PDFs = {
+            dishes: '',
+            wines: '',
+        };
+
+        return PDFs;
+    }
+};
+
+const content = renderContent();
+const PDFs = await getPDFs();
+---
+
+<section id="section3">
+    <h3
+        class="cormorant-garamond-regular text-header text-3xl text-center section-padding"
+    >
+        {content.text[0]}
+    </h3>
+    <div
+        class="flex flex-col gap-8 items-center lg:flex-row lg:mx-auto lg:w-[min(70%,_87.5rem)] menu-margin"
+    >
+        <div
+            class="flex flex-col items-center w-1/2 lg:flex-row lg:justify-start"
+        >
+            <a
+                class="bg-primary z-0 rounded-xl w-[min(85%,_25.75rem)] lg:relative lg:cursor-pointer xl:w-[25.75rem] group
+                lg:before:absolute lg:before:top-0 lg:before:left-0 lg:before:bg-black lg:before:w-full lg:before:h-full lg:before:rounded-xl
+                lg:before:opacity-0 lg:before:transition-opacity lg:before:duration-300 lg:before:ease-in lg:hover:before:opacity-50"
+                href={PDFs.dishes}
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <p
+                    class="absolute z-50 text-2xl text-white left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] opacity-0 transition-opacity
+                duration-300 ease-in group-hover:opacity-100"
+                >
+                    {content.text[1]}
+                </p>
+                <picture class="">
+                    <source srcset="/Dish.webp" type="image/webp" />
+                    <img
+                        class=""
+                        decoding="async"
+                        loading="lazy"
+                        src="/Dish.png"
+                        alt={content.alt[0]}
+                    />
+                </picture>
+            </a>
+            <h6 class="text-xl pt-2 lg:hidden">Patiekalai</h6>
+        </div>
+        <div
+            class="flex flex-col items-center w-1/2 lg:flex-row lg:justify-end"
+        >
+            <a
+                class="bg-primary z-0 rounded-xl w-[min(85%,_25.75rem)] lg:relative lg:cursor-pointer xl:w-[25.75rem] group
+                lg:before:absolute lg:before:top-0 lg:before:left-0 lg:before:bg-black lg:before:w-full lg:before:h-full lg:before:rounded-xl
+                lg:before:opacity-0 lg:before:transition-opacity lg:before:duration-300 lg:before:ease-in lg:hover:before:opacity-50"
+                href={PDFs.wines}
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <p
+                    class="absolute z-50 text-2xl text-white left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] opacity-0 transition-opacity
+                duration-300 ease-in group-hover:opacity-100"
+                >
+                    {content.text[2]}
+                </p>
+                <picture class="">
+                    <source srcset="/Wine.webp" type="image/webp" />
+                    <img
+                        class=""
+                        decoding="async"
+                        loading="lazy"
+                        src="/Wine.png"
+                        alt={content.alt[1]}
+                    />
+                </picture>
+            </a>
+            <h6 class="text-xl pt-2 lg:hidden">Vynai</h6>
+        </div>
+    </div>
+</section>
