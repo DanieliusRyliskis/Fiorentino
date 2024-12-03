@@ -32,7 +32,7 @@ const renderContent = () => {
 
 const getPDFs = async function () {
     try {
-        const markdowns = await Astro.glob('/src/assets/menu/*.md');
+    const markdowns = await Astro.glob('/public/menu/*.md');
         const frontmatter = markdowns.map((f) => f.frontmatter);
 
         const sortLatest = function (categoryName) {

@@ -11,7 +11,7 @@ collections:
   # First item of an Array
   - name: "menu" # Used in routes, e.g., /admin/collections/blog
     label: "Menu" # Used in the UI
-    folder: "src/assets/menu" # Where the .md files are stored, relative to the repo root. 
+    folder: "public/menu" # Where the .md files are stored, relative to the repo root. 
     create: true # Allow users to create new documents in this collection
     # identifier_field: category # Uses category as a identifier
     slug: "{{year}}-{{month}}-{{day}}-menu" # Filename template, e.g., YYYY-MM-DD-h-m -title.md
@@ -23,7 +23,7 @@ collections:
       - { label: "Title", name: "title", widget: "string"}
       - { label: "Category", name: "category", options: ["Patiekalai", "Vynai"], widget: "select"}
       - { label: "Publish Date", name: "publish_date", default: "{{now}}", widget: "datetime"}
-      - { label: "PDF Upload", name: "file_path", widget: "file", choose_url: false, media_folder: "/src/assets/menu"}
+      - { label: "PDF Upload", name: "file_path", widget: "file", choose_url: false, media_folder: "/public/menu"}
   - name: "gallery" # Used in routes, e.g., /admin/collections/blog
     label: "Gallery" # Used in the UI
     folder: "src/assets/pictures" # Where the .md files are stored, relative to the repo root. 
