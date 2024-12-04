@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 
 function Gallery(props) {
     const [modalOpened, setModalOpened] = useState(false);
+    const [startX, setStartX] = useState(0)
     const [position, setPosition] = useState('');
     const [index, setIndex] = useState('');
 
@@ -54,7 +55,6 @@ function Gallery(props) {
 
     useEffect(() => {
         const handleKeyPress = (event) => {
-            console.log(event.key);
             if (event.key === 'ArrowRight') {
                 switchImage('Forwards');
             } else if (event.key === 'ArrowLeft') {
@@ -76,6 +76,19 @@ function Gallery(props) {
             document.body.style.overflow = '';
         };
     }, [modalOpened, switchImage]);
+
+    const handleTouchStart = (e) => {
+        setStartX(e.targetTouches[0].clientX)
+    }
+
+    const handleTouchEnd = (e) => {
+        const distance = e.changedTouches[0].clientX - startX
+        if (distance > 50) {
+            switchImage('Backwards');
+        } else if (distance < -50) {
+            switchImage('Forwards');
+        }
+    }
 
     const preview = function (e) {
         setModalOpened(true);
@@ -128,8 +141,6 @@ function Gallery(props) {
     const middlePictures = genPicture('middle', 'lg:h-[43.875rem]');
     const rightPictures = genPicture('right', 'lg:h-[21.563rem]');
 
-    // In Return Goes The HTML And JSX
-    // You Can Only Return Single Element
     return (
         <>
             <div className="flex flex-col lg:flex-row gap-4 w-fit lg:w-[95%] mx-auto mb-[clamp(4rem,_3.2rem_+_4vw,_8rem)] xl:max-w-[83.5rem]">
@@ -186,11 +197,20 @@ function Gallery(props) {
                                         ].srcSet.values[2].url
                                     }
                                     className="absolute max-w-[85%] max-h-[80%] left-1/2 translate-x-[-50%] top-1/2 translate-y-[-50%]"
+                                    onTouchStart={(e) => handleTouchStart(e)}
+                                    onTouchEnd={(e) => handleTouchEnd(e)}
                                     decoding="async"
                                     alt={props.content[1]}
                                 />
                             </picture>
-                        ) : null}
+                        ) : (
+                            <div
+                                    className="absolute w-[85%] h-[80%] left-1/2 translate-x-[-50%] top-1/2 translate-y-[-50%]"
+                                    onTouchStart={(e) => handleTouchStart(e)}
+                                    onTouchEnd={(e) => handleTouchEnd(e)}
+                            >
+                            </div>
+                        )}
                         <img
                             className="absolute top-1/2 translate-y-[-50%] left-[5%] hidden lg:inline-block cursor-pointer"
                             src="/svg/Arrow_left.svg"
