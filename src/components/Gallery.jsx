@@ -98,43 +98,47 @@ function Gallery(props) {
 
     const genPicture = function (position, height) {
         const pictures = [];
-        for (let i = 0; i < props.optimizedImages.jpg[position].length; i++) {
-            pictures.push(
-                <picture key={i}>
-                    <source
-                        srcSet={
-                            props.optimizedImages.avif[position][i].srcSet
-                                .attribute
-                        }
-                        sizes="(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 80em) 900px, 600px"
-                        type="image/avif"
-                    />
-                    <source
-                        srcSet={
-                            props.optimizedImages.webp[position][i].srcSet
-                                .attribute
-                        }
-                        sizes="(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 80em) 900px, 600px"
-                        type="image/webp"
-                    />
-                    <img
-                        src={props.optimizedImages.jpg[position][i].src}
-                        srcSet={
-                            props.optimizedImages.jpg[position][i].srcSet
-                                .attribute
-                        }
-                        sizes="(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 80em) 900px, 600px"
-                        className={`w-full ${height} lg:object-cover cursor-pointer`}
-                        decoding="async"
-                        onClick={(e) => preview(e)}
-                        data-position={position}
-                        data-index={i}
-                        alt={props.content[1]}
-                    />
-                </picture>,
-            );
+        try{
+            for (let i = 0; i < props.optimizedImages.jpg[position].length; i++) {
+                pictures.push(
+                    <picture key={i}>
+                        <source
+                            srcSet={
+                                props.optimizedImages.avif[position][i].srcSet
+                                    .attribute
+                            }
+                            sizes="(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 80em) 900px, 600px"
+                            type="image/avif"
+                        />
+                        <source
+                            srcSet={
+                                props.optimizedImages.webp[position][i].srcSet
+                                    .attribute
+                            }
+                            sizes="(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 80em) 900px, 600px"
+                            type="image/webp"
+                        />
+                        <img
+                            src={props.optimizedImages.jpg[position][i].src}
+                            srcSet={
+                                props.optimizedImages.jpg[position][i].srcSet
+                                    .attribute
+                            }
+                            sizes="(max-width: 40em) 600px, (min-width: 40.063em) and (max-width: 80em) 900px, 600px"
+                            className={`w-full ${height} lg:object-cover cursor-pointer`}
+                            decoding="async"
+                            onClick={(e) => preview(e)}
+                            data-position={position}
+                            data-index={i}
+                            alt={props.content[1]}
+                        />
+                    </picture>,
+                );
+            }
+            return pictures;
+        } catch (error){
+            console.error(error)
         }
-        return pictures;
     };
 
     const leftPictures = genPicture('left', 'lg:h-[21.563rem]');
