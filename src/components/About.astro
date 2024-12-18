@@ -8,25 +8,27 @@ const { language } = Astro.props;
 const renderContent = () => {
     if (language === 'lt') {
         const content = [
-            'Likimas atvedė mane į Lietuvą ir čia, Vilniuje Alumnato kiemelyje, gimė „Fiorentino“.',
-            'Fiorentino gimė iš aistros gimtai Italijos žemei. Esu daug keliavęs, tačiau visą laiką mane lydėjo Toskanos spalvų, kvapo ir skonio ilgesys.',
-            'Fiorentino gimė iš mažų senų Florencijos restoranėlių skonio ir kvapų, iš Chianti kalvų spalvų bei aromatų.',
-            'Fiorentino gimė iš noro supažindinti lietuvius su patiekalais ir vynais bei Toskanos saulės šiluma.',
+            '„Fiorentino“ gimė iš gilios aistros, kuri mane sieja su mano gimtąja žeme.',
+            'Didžiąją savo gyvenimo dalį praleidau keliaudamas, bet visada su savimi nešiojausi Toskanos spalvas, skonius ir šilumą.',
+            'Jis atgyja, įkvėptas senųjų Florencijos užeigų skonių ir aromatų bei kerinčio Chianti kalvų grožio.',
+            'Jis gimė iš noro pasidalyti su Lietuvos žmonėmis autentišku Toskanos virtuvės skoniu, mūsų vynų turtingumu ir mano krašto saulės šiluma.',
         ];
         return content;
     } else if (language === 'en') {
         const content = [
-            '“Fiorentino” restaurant was conceived thanks to the passion that binds me to my native land.',
-            'I spent a lot of time travelling, but inside me I’ve always been accompanied by the colours and tastes of Tuscany.',
-            '“Fiorentino” restaurant comes true staring from the flavours and scents of the ancient restaurants in Florence to the colours and magic of the Chianti hills.',
-            '“Fiorentino” comes from the will to make the tastiness of our food, wines and the feeling of the  pleasantness of the Tuscan sun available for all the people in Lithuania.',
+            '"Fiorentino" was born from the deep passion that binds me to my native land.',
+            'I have spent much of my life travelling, but I have always carried within me the colours, flavours, and warmth of Tuscany.',
+            "It comes to life inspired by the flavours and aromas of Florence's ancient trattorias and the enchanting beauty of the Chianti hills.",
+            'It stems from my desire to share with the people of Lithuania the authentic taste of Tuscan cuisine, the richness of our wines, and the warmth of the Tuscan sun.',
+
         ];
         return content;
     } else if (language === 'it') {
         const content = [
-            'Il Fiorentino nasce dalla passione per la mia terra, per me che ho viaggiato molto ma sempre accompagnato dai colori e dai sapori della Toscana.',
-            'Il Fiorentino nasce dai gusti e dai profumi degli antichi ristorantini di Firenze, dai colori e dai sapori delle colline del Chianti.',
-            'Il Fiorentino nasce dalla mia voglia di far conoscere al pubblico lituano il gusto del cibo e del vino e la dolcezza del sole di Toscana.',
+            'Il Fiorentino nasce dalla profonda passione che mi lega alla mia terra natale.',
+            'Ho trascorso gran parte della vita viaggiando, ma ho sempre portato con me i colori, i sapori e il calore della Toscana.',
+            'Prende vita ispirato dai sapori e dai profumi delle antiche trattorie di Firenze e dalla bellezza incantevole delle colline del Chianti.',
+            'Nasce dal desiderio di condividere con il pubblico lituano l’autentico gusto della cucina toscana, la ricchezza dei nostri vini e il calore del sole della mia terra.',
         ];
         return content;
     }
@@ -52,15 +54,10 @@ const content = renderContent()
             {content[2]}
         </p>
         <br />
-        <!-- () Groups Multiline Expressions -->
-        {
-            language !== 'it' ? (
-                <>
-                    <p>{content[3]}</p>
-                    <br />
-                </>
-            ) : null
-        }
+        <p>
+            {content[3]}
+        </p>
+        <br />
         <p class="text-lg">-Riccardo Bicicchi</p>
     </div>
 </section>

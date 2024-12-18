@@ -8,19 +8,19 @@ const { language } = Astro.props;
 const renderContent = () => {
     if (language === 'lt') {
         const content = {
-            text: ['Meniu', 'Patiekalai', 'Vynai'],
+            text: ['Meniu', 'Patiekalai', 'Gėrimai'],
             alt: ['Makaronų nuotrauka', 'Vyno nuotrauka'],
         };
         return content;
     } else if (language === 'en') {
         const content = {
-            text: ['Menu', 'Dishes', 'Wines'],
+            text: ['Menu', 'Dishes', 'Drinks'],
             alt: ['Picture of a bowl of pasta', 'Picture of a glass of wine'],
         };
         return content;
     } else if (language === 'it') {
         const content = {
-            text: ['Menu', 'Piatti', 'Vini'],
+            text: ['Menu', 'Piatti', 'Bevande'],
             alt: [
                 'Immagine di un piatto di pasta',
                 'Immagine di un bicchiere di vino',
